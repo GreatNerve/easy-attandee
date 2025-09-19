@@ -7,7 +7,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import { loginSchema } from "@/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
-import { Terminal } from "lucide-react-native";
+import { AlertCircleIcon } from "lucide-react-native";
 import { useCallback, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Pressable, View } from "react-native";
@@ -107,7 +107,7 @@ const LoginForm = () => {
       </View>
 
       {loginError && (
-        <Alert icon={Terminal}>
+        <Alert variant="destructive" icon={AlertCircleIcon}>
           <AlertTitle>Login Error</AlertTitle>
           <AlertDescription>{loginError}</AlertDescription>
         </Alert>

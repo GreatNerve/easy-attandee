@@ -1,12 +1,12 @@
 import backendService, { UserPreferences } from "@/service/backend.service";
 import React, {
-    createContext,
-    ReactNode,
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
 } from "react";
 import { Models } from "react-native-appwrite";
 
@@ -14,7 +14,6 @@ type AuthContextType = {
   user: Models.User<UserPreferences> | null;
   loading: boolean;
   isLoggedIn: boolean;
-  avatar: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -25,7 +24,6 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: false,
   isLoggedIn: false,
-  avatar: null,
   login: async () => {},
   register: async () => {},
   logout: async () => {},
@@ -78,6 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(true);
       try {
         await backendService.register(email, password, name);
+        await login(email, password);
         await refresh();
       } catch (err) {
         setUser(null);
@@ -86,7 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setLoading(false);
       }
     },
-    [refresh]
+    [refresh, login]
   );
 
   const logout = useCallback(async () => {
@@ -104,20 +103,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [refresh]);
 
   const isLoggedIn = !!user;
-  const avatar = user?.prefs?.avatar ?? null;
 
   const value = useMemo<AuthContextType>(
     () => ({
       user,
       loading,
       isLoggedIn,
-      avatar,
       login,
       register,
       logout,
       refresh,
     }),
-    [user, loading, isLoggedIn, avatar, login, register, logout, refresh]
+    [user, loading, isLoggedIn, login, register, logout, refresh]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

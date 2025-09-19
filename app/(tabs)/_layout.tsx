@@ -3,10 +3,14 @@ import { Redirect, Tabs } from "expo-router";
 import { HomeIcon, SpeakerIcon } from "lucide-react-native";
 
 export default function TabsLayout() {
-  const { isLoggedIn, loading } = useAuth();
+  const { user, loading } = useAuth();
 
   if (loading) return null;
-  if (!isLoggedIn) return <Redirect href="/(auth)/login" />;
+  if (!user) return <Redirect href="/(auth)/login" />;
+
+  if (!user.emailVerification) {
+    return <Redirect href="/(auth)/verify" />;
+  }
 
   return (
     <Tabs
