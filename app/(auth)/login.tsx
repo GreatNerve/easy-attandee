@@ -1,0 +1,42 @@
+import LoginForm from "@/components/auth/loginForm";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { LogIn } from "lucide-react-native";
+import React from "react";
+import { Platform, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
+export default function LoginScreen() {
+  return (
+    <KeyboardAwareScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
+      enableOnAndroid
+      extraScrollHeight={Platform.OS === "ios" ? 20 : 100}
+      keyboardShouldPersistTaps="handled"
+    >
+      <View className="flex-1 justify-center items-center px-4 py-12 min-h-screen bg-secondary">
+        <Card className="w-full max-w-md shadow-2xl rounded-3xl border bg-card">
+          <CardHeader className="items-center pt-8">
+            <View className="bg-blue-600 rounded-full p-4 mb-4 shadow-lg">
+              <LogIn size={36} color="#fff" />
+            </View>
+            <CardTitle className="text-2xl font-semibold text-card-foreground text-center">
+              Welcome Back
+            </CardTitle>
+            <CardDescription className="text-center text-secondary-foreground text-base mt-1">
+              Sign in to your account to continue
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-6 pt-4 pb-8">
+            <LoginForm />
+          </CardContent>
+        </Card>
+      </View>
+    </KeyboardAwareScrollView>
+  );
+}
